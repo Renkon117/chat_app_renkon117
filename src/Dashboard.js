@@ -16,26 +16,23 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center"
   },
   flex: {
-    display: "flex",
-    width: "100%"
+    display: "flex"
   },
   topicsWindow: {
-    width: "20%",
-    height: "300px",
-    borderRight: "1px solid grey",
-    background: "lightyellow"
+    width: "30%",
+    height: "340px",
+    borderRight: "1px solid grey"
   },
   chatWindow: {
-    width: "60%",
+    width: "70%",
     height: "300px",
-    padding: "20px",
-    background: "lightblue"
+    padding: "20px"
   },
   chatBox: {
     width: "85%"
   },
   button: {
-    width: "15%"
+    width: "10%"
   }
 }));
 
@@ -53,7 +50,7 @@ export default function Dashboard() {
           Topic placeholder
         </Typography>
 
-        <div className="classes.flex">
+        <div className={classes.flex}>
           <div className={classes.topicsWindow}>
             <List>
               {["topic"].map(topic => (
