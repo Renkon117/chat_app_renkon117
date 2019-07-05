@@ -1,35 +1,17 @@
 import React from "react";
+import io from "socket.io-client";
 
 export const CTX = React.createContext();
-
-/*
-
-mag{
-    from:"user"
-    msg:"hi"
-    topix:"general"
-}
-
-state{
-    topic1:[
-        {msg}, {msg}, {msg}
-    ]
-    topic2:[
-
-    ]
-}
-
-*/
 
 const initState = {
   general: [
     { from: "renkon", msg: "hello" },
     { from: "renk", msg: "hello" },
-    { from: "rensuke", msg: "hello" }
+    { from: "okada", msg: "hello" }
   ],
-  topic2: [
-    { from: "renkon", msg: "hello" },
-    { from: "renkon", msg: "hello" },
+  official: [
+    { from: "okamura", msg: "hello" },
+    { from: "kimura", msg: "hello" },
     { from: "renkon", msg: "hello" }
   ]
 };
@@ -53,7 +35,28 @@ function reducer(state, action) {
   }
 }
 
+let socket;
+
+function sendChatAction(value) {
+  socket.emit("chat message", value);
+}
+
 export default function Store(props) {
-  const reducerHook = React.useReducer(reducer, initState);
-  return <CTX.Provider value={reducerHook}>{props.children}</CTX.Provider>;
+  const [allChats, dispatch] = React.useReducer(reducer, initState);
+
+  if (!socket) {
+    socket = io(":3002");
+    socket.on("chat message", function(msg) {
+      dispatch({ type: "RECEIVE_MESSAGE", payload: msg });
+      console.log({ msg });
+    });
+  }
+
+  const user = "Renkon" + Math.random(100).toFixed(2);
+
+  return (
+    <CTX.Provider value={{ allChats, sendChatAction, user }}>
+      {props.children}
+    </CTX.Provider>
+  );
 }
